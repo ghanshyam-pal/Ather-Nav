@@ -1,0 +1,210 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.athernav.app"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+11-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:4:5-77
+11-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:4:22-74
+12    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+12-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:5:5-92
+12-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:5:22-89
+13    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+13-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:6:5-77
+13-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:6:22-74
+14    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+14-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:7:5-93
+14-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:7:22-90
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:8:5-67
+15-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:8:22-64
+16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+16-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:9:5-79
+16-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:9:22-76
+17    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+17-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:10:5-75
+17-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:10:22-72
+18    <uses-permission android:name="android.permission.BLUETOOTH" />
+18-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:11:5-68
+18-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:11:22-65
+19    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+19-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:12:5-76
+19-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:12:22-73
+20
+21    <permission
+21-->[androidx.core:core:1.12.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/d85085ceaf3fe218053092093934f6af/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+22        android:name="com.athernav.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+22-->[androidx.core:core:1.12.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/d85085ceaf3fe218053092093934f6af/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+23        android:protectionLevel="signature" />
+23-->[androidx.core:core:1.12.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/d85085ceaf3fe218053092093934f6af/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+24
+25    <uses-permission android:name="com.athernav.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+25-->[androidx.core:core:1.12.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/d85085ceaf3fe218053092093934f6af/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+25-->[androidx.core:core:1.12.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/d85085ceaf3fe218053092093934f6af/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+26
+27    <application
+27-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:14:5-66:19
+28        android:allowBackup="true"
+28-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:15:9-35
+29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+29-->[androidx.core:core:1.12.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/d85085ceaf3fe218053092093934f6af/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+30        android:debuggable="true"
+31        android:extractNativeLibs="false"
+32        android:icon="@drawable/ic_launcher"
+32-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:16:9-45
+33        android:label="@string/app_name"
+33-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:17:9-41
+34        android:roundIcon="@drawable/ic_launcher"
+34-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:18:9-50
+35        android:supportsRtl="true"
+35-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:19:9-35
+36        android:testOnly="true"
+37        android:theme="@style/Theme.AtherNav" >
+37-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:20:9-46
+38        <activity
+38-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:22:9-29:20
+39            android:name="com.athernav.app.MainActivity"
+39-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:23:13-41
+40            android:exported="true" >
+40-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:24:13-36
+41            <intent-filter>
+41-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:25:13-28:29
+42                <action android:name="android.intent.action.MAIN" />
+42-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:26:17-69
+42-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:26:25-66
+43
+44                <category android:name="android.intent.category.LAUNCHER" />
+44-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:27:17-77
+44-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:27:27-74
+45            </intent-filter>
+46        </activity>
+47
+48        <!-- Notification Listener Service -->
+49        <service
+49-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:32:9-40:19
+50            android:name="com.athernav.app.NavNotificationListener"
+50-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:33:13-52
+51            android:exported="true"
+51-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:34:13-36
+52            android:label="AtherNav Listener"
+52-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:35:13-46
+53            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+53-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:36:13-87
+54            <intent-filter>
+54-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:37:13-39:29
+55                <action android:name="android.service.notification.NotificationListenerService" />
+55-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:38:17-99
+55-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:38:25-96
+56            </intent-filter>
+57        </service>
+58
+59        <!-- MediaButtonReceiver — required for Ather BLE to recognize us -->
+60        <receiver
+60-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:43:9-49:20
+61            android:name="com.athernav.app.AtherNavMediaButtonReceiver"
+61-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:44:13-56
+62            android:exported="true" >
+62-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:45:13-36
+63            <intent-filter>
+63-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:46:13-48:29
+64                <action android:name="android.intent.action.MEDIA_BUTTON" />
+64-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:47:17-77
+64-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:47:25-74
+65            </intent-filter>
+66        </receiver>
+67
+68        <!--
+69            FIX 1: MediaBrowserServiceCompat declaration
+70            This is what Ather's BLE stack (and all BT devices) look for
+71            when scanning for media apps to connect to — same as VLC/Spotify.
+72            Without this intent-filter, we are invisible to Ather as a media source.
+73        -->
+74        <service
+74-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:57:9-64:19
+75            android:name="com.athernav.app.MediaSessionService"
+75-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:58:13-48
+76            android:exported="true"
+76-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:59:13-36
+77            android:foregroundServiceType="mediaPlayback" >
+77-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:60:13-58
+78            <intent-filter>
+78-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:61:13-63:29
+79                <action android:name="android.media.browse.MediaBrowserService" />
+79-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:62:17-83
+79-->/home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/src/main/AndroidManifest.xml:62:25-80
+80            </intent-filter>
+81        </service>
+82
+83        <provider
+83-->[androidx.emoji2:emoji2:1.2.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/0f0c478ae3801544d21da65048166e43/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+84            android:name="androidx.startup.InitializationProvider"
+84-->[androidx.emoji2:emoji2:1.2.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/0f0c478ae3801544d21da65048166e43/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+85            android:authorities="com.athernav.app.androidx-startup"
+85-->[androidx.emoji2:emoji2:1.2.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/0f0c478ae3801544d21da65048166e43/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+86            android:exported="false" >
+86-->[androidx.emoji2:emoji2:1.2.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/0f0c478ae3801544d21da65048166e43/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+87            <meta-data
+87-->[androidx.emoji2:emoji2:1.2.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/0f0c478ae3801544d21da65048166e43/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+88                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+88-->[androidx.emoji2:emoji2:1.2.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/0f0c478ae3801544d21da65048166e43/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+89                android:value="androidx.startup" />
+89-->[androidx.emoji2:emoji2:1.2.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/0f0c478ae3801544d21da65048166e43/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+90            <meta-data
+90-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ghanshyam-pal/.gradle/caches/transforms-3/81cf0d341208e1615072a3d07143b717/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+91                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+91-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ghanshyam-pal/.gradle/caches/transforms-3/81cf0d341208e1615072a3d07143b717/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+92                android:value="androidx.startup" />
+92-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ghanshyam-pal/.gradle/caches/transforms-3/81cf0d341208e1615072a3d07143b717/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+93            <meta-data
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+94                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+94-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+95                android:value="androidx.startup" />
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+96        </provider>
+97
+98        <receiver
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+99            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+99-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+100            android:directBootAware="false"
+100-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+101            android:enabled="true"
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+102            android:exported="true"
+102-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+103            android:permission="android.permission.DUMP" >
+103-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+104            <intent-filter>
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+105                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+106            </intent-filter>
+107            <intent-filter>
+107-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+108                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+108-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+108-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+109            </intent-filter>
+110            <intent-filter>
+110-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+111                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+112            </intent-filter>
+113            <intent-filter>
+113-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+114                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+114-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+114-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ghanshyam-pal/.gradle/caches/transforms-3/1cdb85cdca350f6724ef84561e5752f4/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+115            </intent-filter>
+116        </receiver>
+117    </application>
+118
+119</manifest>

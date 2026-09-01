@@ -1,0 +1,4 @@
+com.athernav.app.test.app-androidTest-0 /home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/build/generated/res/resValues/androidTest/debug
+com.athernav.app.test.app-mergeDebugAndroidTestResources-1 /home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.athernav.app.test.app-mergeDebugAndroidTestResources-2 /home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.athernav.app.test.app-merged_res-3 /home/ghanshyam-pal/Downloads/AtherNav_lts/AtherNav/app/build/intermediates/merged_res/debugAndroidTest

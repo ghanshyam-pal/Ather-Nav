@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#1A1A2E">
+
+    <!-- App Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ATHER NAV"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#00D4FF"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Google Maps → Ather Dashboard"
+        android:textSize="13sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+
+    <!-- Permission Status -->
+    <TextView
+        android:id="@+id/tvPermission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NOTIFICATION ACCESS: CHECKING..."
+        android:textSize="13sp"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnPermission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GRANT NOTIFICATION ACCESS"
+        android:backgroundTint="#FF6B35"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Dashboard Preview -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DASHBOARD DISPLAY"
+        android:textSize="12sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tvDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:text="---"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#00FF88"
+        android:gravity="center"
+        android:background="#0D0D0D"
+        android:fontFamily="monospace"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Service Status -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="STATUS: STOPPED"
+        android:textSize="13sp"
+        android:textColor="#AAAAAA"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Controls -->
+    <Button
+        android:id="@+id/btnStartService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="START SERVICE"
+        android:backgroundTint="#00D4FF"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/btnStopService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="STOP SERVICE"
+        android:backgroundTint="#444444"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/btnSwitchMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SWITCH MODE (TEST)"
+        android:backgroundTint="#00FF88"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp"/>
+
+    <!-- Instructions -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="HOW TO USE"
+        android:textSize="12sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1. Grant notification access\n2. Connect phone to Ather via Bluetooth\n3. Start service\n4. Open Google Maps and start navigation\n5. Watch dashboard for directions"
+        android:textSize="13sp"
+        android:textColor="#AAAAAA"
+        android:lineSpacingExtra="4dp"/>
+
+</LinearLayout>

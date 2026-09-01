@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AtherNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#00D4FF</item>
+        <item name="colorPrimaryVariant">#0099BB</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorSecondary">#00FF88</item>
+        <item name="android:windowBackground">#1A1A2E</item>
+    </style>
+</resources>
