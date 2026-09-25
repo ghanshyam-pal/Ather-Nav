@@ -61,21 +61,22 @@ Open the **AtherNav** app and complete the 3 setup steps shown on the main scree
 ### Cycling Modes
 - Tap **SWITCH MODE** in the app or use your handlebar Next/Previous buttons to cycle through:
   - `AUTO` (**Smart HUD - Default**): Adaptive cockpit! Locks onto turn navigation when turn is imminent (< 300m), and intelligently alternates between Turn, ETA, Weather, Battery, and Trip stats while cruising straight.
-  - `NAV`: Formatted turn directions (`200M TURN-LEFT`, `RNBT-EXIT-2`)
+  - `NAV`: Formatted turn directions optimized for Ather's 11-char display (`200M TURN-L`, `200M RNBT-2`, `200M FLYVR`)
   - `ETA`: Live arrival time, remaining distance, and remaining duration (`ETA 18-45`, `REM 12-4KM`, `REM 25MIN`)
   - `TRIP`: GPS Trip Computer (`TRIP 14-2KM`, `TIME 28MIN`, `MAX 62KM`, `AVG 38KM`)
   - `RAW`: Full Google Maps text scrolling
   - `WEATHER`: Live temperature and weather condition (e.g. `32C-CLEAR`, `28C-RAIN`)
-  - `NOTIFY`: WhatsApp sender preview and SMS OTP alerts (`OTP-482910`, `RAHUL-MEETING`)
+  - `NOTIFY`: WhatsApp sender preview and SMS OTP alerts (`OTP-482910`, `RAHUL-MSG`)
   - `SYSTEM`: Phone battery percentage, network speed, and device temperature (`BAT-85PC`, `NET-5G`, `PHN-34C`)
   - `SPORTS`: Live cricket match scores (`IND-185-3`)
   - `MUSIC`: Active media playback track title (Spotify / YT Music)
 
-### 🚨 Real-Time Priority Alerts (Override Any Screen)
-- **Traffic Delays & Accidents:** Flashes `JAM +12MIN`, `SLOW-TRAFFIC`, or `ACCIDENT-AHD` when detected.
+### 🚨 Real-Time Priority Alerts (Optimized for 11-Char DeepView Display)
+- **Flyover & Service Road Guidance:** `TAKE-FLYVR`, `SERVICE-RD`, or `UNDERPASS` for critical road decisions.
+- **Traffic Delays & Accidents:** Flashes `JAM +12MIN`, `SLOW-JAM`, or `ACCIDNT-AHD` when detected.
 - **Speed Cameras:** Flashes `CAM 500M` or `CAMERA-AHD` when approaching speed cameras.
 - **Over-Speeding Warning:** Flashes `SLOW-DOWN` when scooter speed exceeds 60 km/h via phone GPS.
-- **Roundabout Exit Numbers:** Accurately displays exit number (`RNBT-EXIT-1` through `RNBT-EXIT-6`).
+- **Roundabout Exit Numbers:** Displays exit number (`RNBT-EXIT-1` or `200M RNBT-2`).
 
 ---
 

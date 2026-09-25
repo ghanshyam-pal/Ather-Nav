@@ -61,14 +61,86 @@ public class NavParser {
         // Detect maneuver
         String maneuver = detectManeuver(combined);
 
-        // Combine
+        // Combine with 11-char optimization for Ather DeepView display
         if (!distance.isEmpty()) {
-            return (distance + " " + maneuver).trim();
+            return combineDistanceAndManeuver(distance, maneuver);
         }
         return maneuver;
     }
 
+    private static String combineDistanceAndManeuver(String distance, String maneuver) {
+        if (distance == null || distance.isEmpty()) return maneuver;
+        if (maneuver == null || maneuver.isEmpty()) return distance;
+
+        String formattedManeuver;
+        if ("TURN-LEFT".equals(maneuver)) {
+            formattedManeuver = "TURN-L";
+        } else if ("TURN-RIGHT".equals(maneuver)) {
+            formattedManeuver = "TURN-R";
+        } else if ("KEEP-LEFT".equals(maneuver)) {
+            formattedManeuver = "KEEP-L";
+        } else if ("KEEP-RIGHT".equals(maneuver)) {
+            formattedManeuver = "KEEP-R";
+        } else if ("EXIT-LEFT".equals(maneuver)) {
+            formattedManeuver = "EXIT-L";
+        } else if ("EXIT-RIGHT".equals(maneuver)) {
+            formattedManeuver = "EXIT-R";
+        } else if ("RAMP-LEFT".equals(maneuver)) {
+            formattedManeuver = "RAMP-L";
+        } else if ("RAMP-RIGHT".equals(maneuver)) {
+            formattedManeuver = "RAMP-R";
+        } else if ("RAMP-SL".equals(maneuver)) {
+            formattedManeuver = "RMP-SL";
+        } else if ("RAMP-SR".equals(maneuver)) {
+            formattedManeuver = "RMP-SR";
+        } else if ("GO-STRAIGHT".equals(maneuver)) {
+            formattedManeuver = "STRGHT";
+        } else if (maneuver.startsWith("RNBT-EXIT-")) {
+            formattedManeuver = "RNBT-" + maneuver.substring("RNBT-EXIT-".length());
+        } else if ("RNBT-EXIT".equals(maneuver)) {
+            formattedManeuver = "RNBT";
+        } else if ("U-TURN-L".equals(maneuver) || "U-TURN-R".equals(maneuver)) {
+            formattedManeuver = "U-TURN";
+        } else if ("MERGE-L".equals(maneuver)) {
+            formattedManeuver = "MRG-L";
+        } else if ("MERGE-R".equals(maneuver)) {
+            formattedManeuver = "MRG-R";
+        } else if ("DEST-LEFT".equals(maneuver)) {
+            formattedManeuver = "DEST-L";
+        } else if ("DEST-RIGHT".equals(maneuver)) {
+            formattedManeuver = "DEST-R";
+        } else if ("TAKE-FLYVR".equals(maneuver)) {
+            formattedManeuver = "FLYVR";
+        } else if ("SERVICE-RD".equals(maneuver)) {
+            formattedManeuver = "SRV-RD";
+        } else if ("UNDERPASS".equals(maneuver)) {
+            formattedManeuver = "UNDR-P";
+        } else {
+            formattedManeuver = maneuver;
+        }
+
+        return (distance + " " + formattedManeuver).trim();
+    }
+
     private static String detectManeuver(String text) {
+
+        // Flyover / Elevated Road
+        if (text.contains("flyover") || text.contains("overpass")) {
+            if (text.contains("service") || text.contains("below") || text.contains("under") || text.contains("avoid")) {
+                return "SERVICE-RD";
+            }
+            return "TAKE-FLYVR";
+        }
+
+        // Service Road
+        if (text.contains("service road") || text.contains("service lane")) {
+            return "SERVICE-RD";
+        }
+
+        // Underpass / Subway
+        if (text.contains("underpass") || text.contains("subway") || text.contains("tunnel")) {
+            return "UNDERPASS";
+        }
 
         // Ferry
         if (text.contains("ferry") && text.contains("train")) return "FERRY-TRAIN";
@@ -272,17 +344,17 @@ public class NavParser {
             return sanitize("JAM +" + m.group(1) + "MIN");
         }
 
-        // 2. Accident
+        // 2. Accident (max 11 chars)
         if (lower.contains("accident")) {
-            return "ACCIDENT-AHD";
+            return "ACCIDNT-AHD";
         }
 
-        // 3. Heavy / Slow Traffic
+        // 3. Heavy / Slow Traffic (max 11 chars)
         if (lower.contains("heavy traffic") || lower.contains("congestion")) {
-            return "HEAVY-TRAFFIC";
+            return "HEAVY-JAM";
         }
         if (lower.contains("slow traffic")) {
-            return "SLOW-TRAFFIC";
+            return "SLOW-JAM";
         }
 
         return "";
