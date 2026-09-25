@@ -35,16 +35,18 @@ public class NavNotificationListener extends NotificationListenerService {
 
         CharSequence titleCs   = notification.extras.getCharSequence(Notification.EXTRA_TITLE);
         CharSequence textCs    = notification.extras.getCharSequence(Notification.EXTRA_TEXT);
+        CharSequence subTextCs = notification.extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
         CharSequence bigTextCs = notification.extras.getCharSequence(Notification.EXTRA_BIG_TEXT);
 
-        String title    = titleCs   != null ? titleCs.toString()  : "";
-        String text     = textCs    != null ? textCs.toString()   : "";
-        String bigText  = bigTextCs != null ? bigTextCs.toString(): "";
+        String title    = titleCs   != null ? titleCs.toString()   : "";
+        String text     = textCs    != null ? textCs.toString()    : "";
+        String subText  = subTextCs != null ? subTextCs.toString() : "";
+        String bigText  = bigTextCs != null ? bigTextCs.toString() : "";
         String fullText = bigText.isEmpty() ? text : bigText;
 
         // --- GOOGLE MAPS ---
         if (MAPS_PACKAGE.equals(pkg)) {
-            handleMapsNotification(title, fullText);
+            handleMapsNotification(title, fullText, subText);
             return;
         }
 
@@ -79,23 +81,22 @@ public class NavNotificationListener extends NotificationListenerService {
     // -------------------------
     // MAPS
     // -------------------------
-    private void handleMapsNotification(String title, String text) {
-        ModeManager.Mode mode = ModeManager.getCurrentMode();
+    private void handleMapsNotification(String title, String text, String subText) {
+        NavInfo info = NavParser.parseFull(title, text, subText);
+        String raw = NavParser.sanitize(title.isEmpty() ? text : title + " " + text);
 
-        if (mode == ModeManager.Mode.RAW) {
-            String raw = NavParser.sanitize(title.isEmpty() ? text : title);
-            if (!raw.equals(lastNavInstruction)) {
-                lastNavInstruction = raw;
-                sendToService(raw, "NAV");
-            }
-        } else if (mode == ModeManager.Mode.NAV) {
-            String parsed = NavParser.parse(title, text);
-            if (!parsed.equals(lastNavInstruction)) {
-                lastNavInstruction = parsed;
-                sendToService(parsed, "NAV");
-            }
-        }
-        // Other modes: ignore Maps notification while not in NAV/RAW
+        Intent intent = new Intent(this, MediaSessionService.class);
+        intent.setAction(MediaSessionService.ACTION_UPDATE);
+        intent.putExtra(MediaSessionService.EXTRA_SOURCE, "NAV");
+        intent.putExtra(MediaSessionService.EXTRA_NAV_TEXT, info.turnInstruction);
+        intent.putExtra("distance_meters", info.distanceMeters);
+        intent.putExtra("eta_time", info.etaTime);
+        intent.putExtra("rem_dist", info.remainingDist);
+        intent.putExtra("rem_time", info.remainingTime);
+        intent.putExtra("traffic_alert", info.trafficAlert);
+        intent.putExtra("speed_camera", info.speedCamera);
+        intent.putExtra("raw_text", raw);
+        startService(intent);
     }
 
     // -------------------------

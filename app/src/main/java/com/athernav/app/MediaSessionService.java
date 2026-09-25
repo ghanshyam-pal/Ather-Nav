@@ -13,6 +13,7 @@ import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -46,6 +47,12 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     public  static final String EXTRA_NAV_TEXT     = "nav_text";
     public  static final String EXTRA_SOURCE       = "source";
     private static final long   LONG_PRESS_MS      = 800;
+
+    private static volatile boolean running = false;
+
+    public static boolean isRunning() {
+        return running;
+    }
 
     private static MediaSessionCompat activeSession;
 
@@ -82,6 +89,20 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     private WeatherFetcher weatherFetcher;
     private SystemMonitor  systemMonitor;
     private CricketFetcher cricketFetcher;
+    private TripComputer   tripComputer;
+
+    // Navigation & Smart HUD state
+    private NavInfo latestNavInfo   = new NavInfo();
+    private String  lastRawText     = "WAITING";
+    private String  lastTripText    = "TRIP 0-0KM";
+    private String  alertOverrideText = null;
+    private long    alertOverrideUntilMs = 0;
+
+    // HUD and ETA display loop
+    private final Handler hudHandler = new Handler(Looper.getMainLooper());
+    private Runnable hudRunnable;
+    private int hudCycleIndex = 0;
+    private static final long HUD_CYCLE_INTERVAL = 3500; // 3.5s rotation
 
     // Last values per mode
     private String lastNavText     = "WAITING";
@@ -97,6 +118,7 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     @Override
     public void onCreate() {
         super.onCreate();
+        running = true;
         createNotificationChannel();
         requestAudioFocus();
         initMediaSession();
@@ -107,6 +129,8 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         initWeather();
         initSystem();
         initCricket();
+        initTripComputer();
+        startHudCycle();
         startForeground(NOTIF_ID, buildNotification(currentText));
     }
 
@@ -115,7 +139,26 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         if (intent != null && ACTION_UPDATE.equals(intent.getAction())) {
             String text   = intent.getStringExtra(EXTRA_NAV_TEXT);
             String source = intent.getStringExtra(EXTRA_SOURCE);
-            if (text != null && !text.isEmpty()) {
+            if ("NAV".equals(source)) {
+                latestNavInfo.turnInstruction = text != null ? text : "WAITING";
+                latestNavInfo.distanceMeters = intent.getIntExtra("distance_meters", -1);
+                latestNavInfo.etaTime = intent.getStringExtra("eta_time");
+                latestNavInfo.remainingDist = intent.getStringExtra("rem_dist");
+                latestNavInfo.remainingTime = intent.getStringExtra("rem_time");
+                latestNavInfo.trafficAlert = intent.getStringExtra("traffic_alert");
+                latestNavInfo.speedCamera = intent.getStringExtra("speed_camera");
+                String raw = intent.getStringExtra("raw_text");
+                if (raw != null) lastRawText = raw;
+
+                // Priority alert: Traffic Jam or Speed Camera
+                if (latestNavInfo.trafficAlert != null && !latestNavInfo.trafficAlert.isEmpty()) {
+                    triggerAlertOverride(latestNavInfo.trafficAlert, 4000);
+                } else if (latestNavInfo.speedCamera != null && !latestNavInfo.speedCamera.isEmpty()) {
+                    triggerAlertOverride(latestNavInfo.speedCamera, 4000);
+                }
+
+                handleUpdate(text, "NAV");
+            } else if (text != null && !text.isEmpty()) {
                 handleUpdate(text, source != null ? source : "NAV");
             }
         } else if (intent != null && ACTION_SWITCH_MODE.equals(intent.getAction())) {
@@ -126,17 +169,26 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
     @Override
     public void onDestroy() {
+        running = false;
         positionHandler.removeCallbacks(positionRunnable);
         refreshHandler.removeCallbacks(refreshRunnable);
-        if (bluetoothReceiver != null) unregisterReceiver(bluetoothReceiver);
+        hudHandler.removeCallbacks(hudRunnable);
+        if (bluetoothReceiver != null) {
+            try {
+                unregisterReceiver(bluetoothReceiver);
+            } catch (Exception ignored) {}
+        }
         stopSilentPlayer();
-        if (audioFocusRequest != null) {
-            ((AudioManager) getSystemService(Context.AUDIO_SERVICE))
-                .abandonAudioFocusRequest(audioFocusRequest);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && audioFocusRequest != null) {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (am != null) {
+                am.abandonAudioFocusRequest(audioFocusRequest);
+            }
         }
         weatherFetcher.stop();
         systemMonitor.stop();
         cricketFetcher.stop();
+        if (tripComputer != null) tripComputer.stop();
         if (mediaSession != null) {
             mediaSession.setActive(false);
             mediaSession.release();
@@ -252,7 +304,13 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
             }
         };
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
-        registerReceiver(bluetoothReceiver, filter);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(bluetoothReceiver, filter, Context.RECEIVER_EXPORTED);
+            } else {
+                registerReceiver(bluetoothReceiver, filter);
+            }
+        } catch (Exception ignored) {}
     }
 
     private void recreateMediaSession() {
@@ -275,23 +333,30 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     // -----------------------------------------------
     private void requestAudioFocus() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        AudioAttributes attrs = new AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_MEDIA)
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-            .build();
-        audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-            .setAudioAttributes(attrs)
-            .setAcceptsDelayedFocusGain(true)
-            .setOnAudioFocusChangeListener(change -> {
-                if (change == AudioManager.AUDIOFOCUS_LOSS ||
-                    change == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                    if (ModeManager.getCurrentMode() != ModeManager.Mode.MUSIC) {
-                        am.requestAudioFocus(audioFocusRequest);
+        if (am == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AudioAttributes attrs = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build();
+            audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(attrs)
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener(change -> {
+                    if (change == AudioManager.AUDIOFOCUS_LOSS ||
+                        change == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+                        if (ModeManager.getCurrentMode() != ModeManager.Mode.MUSIC) {
+                            try {
+                                am.requestAudioFocus(audioFocusRequest);
+                            } catch (Exception ignored) {}
+                        }
                     }
-                }
-            })
-            .build();
-        am.requestAudioFocus(audioFocusRequest);
+                })
+                .build();
+            am.requestAudioFocus(audioFocusRequest);
+        } else {
+            am.requestAudioFocus(change -> {}, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
     }
 
     // -----------------------------------------------
@@ -423,8 +488,15 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         switch (source) {
             case "NAV":
                 lastNavText = text;
-                if (mode == ModeManager.Mode.NAV || mode == ModeManager.Mode.RAW)
+                if (mode == ModeManager.Mode.NAV) {
                     pushToDashboard(text);
+                } else if (mode == ModeManager.Mode.RAW) {
+                    pushToDashboard(lastRawText);
+                } else if (mode == ModeManager.Mode.AUTO) {
+                    if (latestNavInfo.isImminentTurn()) {
+                        pushToDashboard(text);
+                    }
+                }
                 break;
             case "NOTIFY":
                 lastNotifyText = text;
@@ -484,7 +556,10 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
     private String getModeLabel() {
         switch (ModeManager.getCurrentMode()) {
+            case AUTO:    return "SMART-HUD";
             case NAV:     return "NAVIGATION";
+            case ETA:     return "LIVE-ETA";
+            case TRIP:    return "TRIP-STATS";
             case RAW:     return "MAPS-RAW";
             case WEATHER: return "WEATHER";
             case NOTIFY:  return "NOTIFY";
@@ -551,8 +626,11 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
 
     private void refreshCurrentMode() {
         switch (ModeManager.getCurrentMode()) {
-            case NAV:
-            case RAW:     pushToDashboard(lastNavText);     break;
+            case AUTO:    updateAutoHudDisplay();           break;
+            case NAV:     pushToDashboard(lastNavText);     break;
+            case ETA:     updateEtaModeDisplay();           break;
+            case TRIP:    pushToDashboard(lastTripText);    break;
+            case RAW:     pushToDashboard(lastRawText);     break;
             case WEATHER: pushToDashboard(lastWeatherText); break;
             case NOTIFY:  pushToDashboard(lastNotifyText);  break;
             case SYSTEM:  pushToDashboard(lastSystemText);  break;
@@ -561,9 +639,120 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
         }
     }
 
+    private void triggerAlertOverride(String alertText, long durationMs) {
+        alertOverrideText = NavParser.sanitize(alertText);
+        alertOverrideUntilMs = System.currentTimeMillis() + durationMs;
+        pushToDashboard(alertOverrideText);
+    }
+
+    private void startHudCycle() {
+        hudRunnable = new Runnable() {
+            @Override
+            public void run() {
+                long now = System.currentTimeMillis();
+                ModeManager.Mode mode = ModeManager.getCurrentMode();
+
+                if (now < alertOverrideUntilMs && alertOverrideText != null) {
+                    pushToDashboard(alertOverrideText);
+                } else if (mode == ModeManager.Mode.AUTO) {
+                    updateAutoHudDisplay();
+                } else if (mode == ModeManager.Mode.ETA) {
+                    updateEtaModeDisplay();
+                }
+
+                hudHandler.postDelayed(this, HUD_CYCLE_INTERVAL);
+            }
+        };
+        hudHandler.postDelayed(hudRunnable, HUD_CYCLE_INTERVAL);
+    }
+
+    private void updateAutoHudDisplay() {
+        // If turn is imminent (distance <= 300 meters) or active turn, lock onto turn
+        if (latestNavInfo.isImminentTurn()) {
+            pushToDashboard(latestNavInfo.turnInstruction != null ? latestNavInfo.turnInstruction : "ATHERNAV");
+            return;
+        }
+
+        // Long straight / cruising: rotate through smart stats
+        hudCycleIndex++;
+        switch (hudCycleIndex % 6) {
+            case 0:
+                pushToDashboard(latestNavInfo.turnInstruction != null ? latestNavInfo.turnInstruction : "ATHERNAV");
+                break;
+            case 1:
+                if (latestNavInfo.etaTime != null && !latestNavInfo.etaTime.isEmpty()) {
+                    pushToDashboard(latestNavInfo.etaTime);
+                } else {
+                    pushToDashboard(latestNavInfo.turnInstruction);
+                }
+                break;
+            case 2:
+                if (latestNavInfo.remainingDist != null && !latestNavInfo.remainingDist.isEmpty()) {
+                    pushToDashboard(latestNavInfo.remainingDist);
+                } else {
+                    pushToDashboard(lastTripText);
+                }
+                break;
+            case 3:
+                pushToDashboard(lastWeatherText);
+                break;
+            case 4:
+                pushToDashboard(lastSystemText);
+                break;
+            case 5:
+                pushToDashboard(tripComputer != null ? tripComputer.getDistanceText() : lastTripText);
+                break;
+        }
+    }
+
+    private void updateEtaModeDisplay() {
+        hudCycleIndex++;
+        switch (hudCycleIndex % 3) {
+            case 0:
+                if (latestNavInfo.etaTime != null && !latestNavInfo.etaTime.isEmpty()) {
+                    pushToDashboard(latestNavInfo.etaTime);
+                } else {
+                    pushToDashboard("NO-ETA");
+                }
+                break;
+            case 1:
+                if (latestNavInfo.remainingDist != null && !latestNavInfo.remainingDist.isEmpty()) {
+                    pushToDashboard(latestNavInfo.remainingDist);
+                } else {
+                    pushToDashboard("NO-REM-DIST");
+                }
+                break;
+            case 2:
+                if (latestNavInfo.remainingTime != null && !latestNavInfo.remainingTime.isEmpty()) {
+                    pushToDashboard(latestNavInfo.remainingTime);
+                } else {
+                    pushToDashboard("NO-REM-TIME");
+                }
+                break;
+        }
+    }
+
     // -----------------------------------------------
-    // FETCHER INIT
+    // FETCHER & TRIP INIT
     // -----------------------------------------------
+    private void initTripComputer() {
+        tripComputer = new TripComputer(this);
+        tripComputer.start(new TripComputer.TripCallback() {
+            @Override
+            public void onTripStatsUpdate(String dashboardText) {
+                lastTripText = dashboardText;
+                if (ModeManager.getCurrentMode() == ModeManager.Mode.TRIP) {
+                    pushToDashboard(dashboardText);
+                }
+            }
+
+            @Override
+            public void onSpeedLimitAlert(String alertText) {
+                triggerAlertOverride(alertText, 3500);
+            }
+        });
+    }
+
     private void initWeather() {
         weatherFetcher = new WeatherFetcher();
         weatherFetcher.start(text -> {
@@ -590,10 +779,15 @@ public class MediaSessionService extends MediaBrowserServiceCompat {
     // NOTIFICATION
     // -----------------------------------------------
     private void createNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(
-            CHANNEL_ID, "AtherNav Active", NotificationManager.IMPORTANCE_LOW);
-        channel.setDescription("Navigation mirroring to Ather dashboard");
-        getSystemService(NotificationManager.class).createNotificationChannel(channel);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID, "AtherNav Active", NotificationManager.IMPORTANCE_LOW);
+            channel.setDescription("Navigation mirroring to Ather dashboard");
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            if (nm != null) {
+                nm.createNotificationChannel(channel);
+            }
+        }
     }
 
     private Notification buildNotification(String navText) {
