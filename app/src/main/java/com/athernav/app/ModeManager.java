@@ -6,7 +6,10 @@ package com.athernav.app;
 public class ModeManager {
 
     public enum Mode {
+        AUTO,       // Smart HUD: Auto-switches turn / ETA / weather / battery / trip
         NAV,        // Custom turn by turn: 200M TURN-LEFT
+        ETA,        // Live ETA + Remaining distance & time
+        TRIP,       // Trip computer: Distance + Duration + Max speed + Avg speed
         RAW,        // Full Google Maps text scrolling
         WEATHER,    // Temp + rain alerts
         NOTIFY,     // WhatsApp + SMS OTP
@@ -15,10 +18,13 @@ public class ModeManager {
         MUSIC       // Spotify/any player control
     }
 
-    private static Mode currentMode = Mode.NAV;
+    private static Mode currentMode = Mode.AUTO;
 
     private static final Mode[] ORDER = {
+        Mode.AUTO,
         Mode.NAV,
+        Mode.ETA,
+        Mode.TRIP,
         Mode.RAW,
         Mode.WEATHER,
         Mode.NOTIFY,
@@ -45,7 +51,10 @@ public class ModeManager {
 
     public static String getModeName() {
         switch (currentMode) {
+            case AUTO:    return "AUTO-HUD";
             case NAV:     return "NAV-MODE";
+            case ETA:     return "ETA-MODE";
+            case TRIP:    return "TRIP-MODE";
             case RAW:     return "RAW-MODE";
             case WEATHER: return "WTHR-MODE";
             case NOTIFY:  return "NOTIF-MODE";

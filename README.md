@@ -1,80 +1,116 @@
-# AtherNav - Google Maps → Ather Rizta S Dashboard
+# AtherNav - Google Maps → Bluetooth Dashboard Navigation
 
-Mirror Google Maps turn-by-turn navigation to your Ather Rizta S dashboard via MediaSession Bluetooth.
+Mirror Google Maps turn-by-turn navigation directly to your Ather Rizta S (and compatible Bluetooth/AVRCP vehicle dashboards, car stereos, or smart displays) via Bluetooth MediaSession.
 
-## How It Works
+Also features live Weather, Cricket score tracker, Notification/OTP preview, and Phone System monitor modes!
 
-1. App listens to Google Maps notifications using NotificationListenerService
-2. Parses navigation instruction (turn direction + distance)
-3. Formats to 11-char uppercase display string (e.g. `200M TURN-LEFT`)
-4. Pushes as MediaSession track title
-5. Ather BLE reads MediaSession and shows it on dashboard
+---
 
-## Build Instructions
+## 📲 Quick Install (Universal APK)
+
+A prebuilt, signed, universal release APK is included in this repository at:
+👉 **[`output/app.apk`](output/app.apk)** (4.5 MB)
+
+### Option 1: Direct Phone Download / Sideload
+1. Transfer or download **`output/app.apk`** to your Android phone (via WhatsApp, Google Drive, Telegram, or Chrome).
+2. Tap the APK file to install it.
+3. Allow "Install unknown apps" if prompted by your browser or file manager.
+
+### Option 2: Install via ADB (USB / Wireless)
+```bash
+adb install -r output/app.apk
+```
+
+---
+
+## ⚙️ First-Time Phone Setup (Works on All Android Devices)
+
+Open the **AtherNav** app and complete the 3 setup steps shown on the main screen:
+
+### 1. Notification Listener Access
+- Tap **GRANT NOTIFICATION ACCESS**.
+- Select **AtherNav** and enable the toggle.
+> [!IMPORTANT]
+> **Android 13 / 14 / 15 "Restricted setting" Fix:**
+> If the toggle is greyed out with the message: *"Restricted setting: For your security, this setting is currently unavailable"*:
+> 1. In AtherNav, tap **ALLOW RESTRICTED SETTINGS (ANDROID 13+)** (or open Phone Settings → Apps → AtherNav).
+> 2. Tap the **three dots (⋮)** in the top-right corner.
+> 3. Tap **Allow restricted settings** and confirm with your fingerprint/PIN.
+> 4. Return to AtherNav and tap **GRANT NOTIFICATION ACCESS** again.
+
+### 2. Phone Permissions
+- Tap **GRANT PERMISSIONS** to allow:
+  - **Notifications (`POST_NOTIFICATIONS`)**: Keeps the background foreground service alive.
+  - **Nearby Devices / Bluetooth (`BLUETOOTH_CONNECT`)**: Required on Android 12+ for Bluetooth reconnect detection.
+
+### 3. Battery Optimization (Crucial for background stability)
+- Tap **SET BATTERY TO UNRESTRICTED** and select "Allow".
+- *For Xiaomi (MIUI/HyperOS), Samsung (OneUI), OnePlus (OxygenOS), Oppo, and Vivo:*
+  - Open App Info → Battery → Select **Unrestricted** / **No restrictions**.
+  - Enable **Autostart** in your phone's app settings.
+
+---
+
+## 🚀 How to Use
+
+1. Turn on your scooter / vehicle and ensure your phone is connected via Bluetooth.
+2. Open **AtherNav** and tap **START SERVICE**.
+3. Open **Google Maps** and start navigation.
+4. Watch turn-by-turn directions live on your dashboard!
+
+### Cycling Modes
+- Tap **SWITCH MODE** in the app or use your handlebar Next/Previous buttons to cycle through:
+  - `AUTO` (**Smart HUD - Default**): Adaptive cockpit! Locks onto turn navigation when turn is imminent (< 300m), and intelligently alternates between Turn, ETA, Weather, Battery, and Trip stats while cruising straight.
+  - `NAV`: Formatted turn directions optimized for Ather's 11-char display (`200M TURN-L`, `200M RNBT-2`, `200M FLYVR`)
+  - `ETA`: Live arrival time, remaining distance, and remaining duration (`ETA 18-45`, `REM 12-4KM`, `REM 25MIN`)
+  - `TRIP`: GPS Trip Computer (`TRIP 14-2KM`, `TIME 28MIN`, `MAX 62KM`, `AVG 38KM`)
+  - `RAW`: Full Google Maps text scrolling
+  - `WEATHER`: Live temperature and weather condition (e.g. `32C-CLEAR`, `28C-RAIN`)
+  - `NOTIFY`: WhatsApp sender preview and SMS OTP alerts (`OTP-482910`, `RAHUL-MSG`)
+  - `SYSTEM`: Phone battery percentage, network speed, and device temperature (`BAT-85PC`, `NET-5G`, `PHN-34C`)
+  - `SPORTS`: Live cricket match scores (`IND-185-3`)
+  - `MUSIC`: Active media playback track title (Spotify / YT Music)
+
+### 🚨 Real-Time Priority Alerts (Optimized for 11-Char DeepView Display)
+- **Flyover & Service Road Guidance:** `TAKE-FLYVR`, `SERVICE-RD`, or `UNDERPASS` for critical road decisions.
+- **Traffic Delays & Accidents:** Flashes `JAM +12MIN`, `SLOW-JAM`, or `ACCIDNT-AHD` when detected.
+- **Speed Cameras:** Flashes `CAM 500M` or `CAMERA-AHD` when approaching speed cameras.
+- **Over-Speeding Warning:** Flashes `SLOW-DOWN` when scooter speed exceeds 60 km/h via phone GPS.
+- **Roundabout Exit Numbers:** Displays exit number (`RNBT-EXIT-1` or `200M RNBT-2`).
+
+---
+
+## 🛠️ Building from Source
 
 ### Requirements
-- Android Studio Hedgehog or newer
-- JDK 8+
-- Android phone (API 26+)
+- JDK 17+
+- Android SDK (API 34 platform & build-tools)
 
-### Steps
-1. Open Android Studio
-2. File → Open → select this `AtherNav` folder
-3. Wait for Gradle sync to complete
-4. Connect your phone via USB
-5. Enable USB Debugging on phone (Developer Options)
-6. Click Run (green play button)
-
-## First Time Setup on Phone
-
-1. Open AtherNav app
-2. Tap **GRANT NOTIFICATION ACCESS**
-3. Find "AtherNav" in the list and enable it
-4. Go back to app
-5. Connect phone to Ather via Bluetooth
-6. Tap **START SERVICE**
-7. Open Google Maps → start navigation
-8. Watch dashboard!
-
-## Battery Optimization (IMPORTANT)
-
-To prevent Android from killing the service:
-- Settings → Apps → AtherNav → Battery → **Unrestricted**
-
-## Display Format Examples
-
-| Google Maps says | Dashboard shows |
-|---|---|
-| Turn left in 200 m | `200M TURN-LEFT` |
-| Turn right in 500 m | `500M TURN-RIGHT` |
-| Continue straight for 1.2 km | `1-2KM GO-STRAIGHT` |
-| Keep left | `KEEP-LEFT` |
-| Take the ramp on the right | `RAMP-RIGHT` |
-| At the roundabout, take exit | `RNBT-R` |
-| U-turn | `U-TURN-R` |
-| You have arrived | `ARRIVED` |
-| Rerouting | `REROUTING` |
-
-## Files
-
+### Build Commands
+To build the signed universal release APK with a single command:
+```bash
+./build_apk.sh
 ```
-app/src/main/java/com/athernav/app/
-├── MainActivity.java           - UI, permission handling
-├── NavNotificationListener.java - Reads Google Maps notifications  
-├── MediaSessionService.java    - Maintains MediaSession for Ather BLE
-└── NavParser.java              - Parses nav text to display format
+Or with Gradle:
+```bash
+./gradlew assembleRelease
 ```
+The compiled, optimized APK will be produced at `output/app.apk` and `app/build/outputs/apk/release/app-release.apk`.
 
-## Troubleshooting
+### Automated GitHub CI/CD
+A GitHub Actions workflow is included at [`.github/workflows/build-apk.yml`](.github/workflows/build-apk.yml). Every push or release tag automatically builds and publishes the APK as a downloadable artifact.
 
-**Text not showing on dashboard:**
-- Make sure Ather is connected via Bluetooth
-- Check music is NOT playing (our session needs to be active)
-- Restart MediaSessionService from app
+---
 
-**Wrong instruction showing:**
-- Google Maps may use different wording - check logcat for raw notification text
-- Report the raw text to improve NavParser keyword matching
+## 📱 Compatibility Matrix
 
-**Service getting killed:**
-- Set battery optimization to Unrestricted for AtherNav
+| Feature | Supported Range | Notes |
+|---|---|---|
+| **Android Versions** | Android 8.0 (API 26) through Android 15+ | `minSdk 26`, `targetSdk 34` |
+| **Brands / ROMs** | Samsung OneUI, Google Pixel, Xiaomi MIUI/HyperOS, OnePlus OxygenOS, Nothing OS, Motorola, Oppo ColorOS, Vivo FuntouchOS | Handled runtime permissions, foreground service types, and Doze exemptions |
+| **Dashboards / Vehicles** | Ather Rizta S, Ather 450X, Ola S1, TVS iQube, Royal Enfield Tripper, Car Bluetooth AVRCP head units, Bluetooth helmets (Sena, Cardo) | Uses standard Bluetooth MediaBrowser & MediaSession AVRCP |
+
+---
+
+## 📄 License
+This project is licensed under the [MIT License](LICENSE).

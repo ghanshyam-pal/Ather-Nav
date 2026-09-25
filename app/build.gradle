@@ -8,16 +8,28 @@ android {
 
     defaultConfig {
         applicationId "com.athernav.app"
-        minSdk 26
+        minSdk 21
         targetSdk 34
         versionCode 1
         versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../keystore/release.jks")
+            storePassword "athernav123"
+            keyAlias "athernav"
+            keyPassword "athernav123"
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
